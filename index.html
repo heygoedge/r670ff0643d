@@ -29,7 +29,7 @@ details.def{margin-top:8px;font-size:13px}details.def summary{cursor:pointer;col
 <li><b>转向角：</b>这个弯从起点到终点 Yaw 转过的角度，看转向够不够。</li>
 <li><b>最大立刃、峰值在弯的 %：</b>本弯 Roll 绝对值最大值，以及它落在弯里的位置（0% = 弯起点，100% = 弯终点），越靠前说明立刃越早。</li>
 <li><b>立刃建立 °/s：</b>峰值前最平的那一刻到峰值，Roll 的平均变化速率。<b>放刃 °/s：</b>峰值到下一个弯起点后 0.4 秒内最平的那一刻，Roll 的平均变化速率。</li>
-<li><b>峰值旋转速率：</b>本弯 Yaw 变化最快的那一刻（°/s）。</li><li><b>线速度 / 转弯半径（左右脚各算）：</b>线速度 v = √(侧向加速度 a × 转弯半径 R)。a 用这只脚主链路校准后的侧向加速度（App 离心力同一个函数，1.5Hz 平滑）；R 用这只脚自己的轨迹（弯型图里的物理轨迹）每一刻的弯曲程度量出来（前后各约 0.2 秒三点定圆）。甩板尾时后脚走的弧和前脚不一样，半径不同，两只脚的线速度就会分开；走刃时两只脚和主链路速度基本一致。轨迹接近直线时半径很大，数值会冲高，画到图顶边为止。卡片上是本弯中位数。灰虚线是主链路速度作参照。</li><li><b>轨迹判定（标题旁）：</b>用前后脚轨迹偏移判断这个弯是走刃、搓雪还是甩板尾。<b>甩板尾</b> = 外偏距离超过误差带（确实有外偏）且外摆速度超过同类弯典型值（外偏是突然增加的），图上红底标出满足两个条件的时段；<b>搓雪</b> = 有外偏但慢慢形成、没有突增；<b>走刃</b> = 外偏一直在误差带以内。误差带 15 cm（走刃的 Kin、滑手 A 每弯最大外偏中位 12.8 cm，是积分累积误差）；同类弯 = 同一人同一条刃，外摆门槛 = 这类弯最大外摆速度中位数 × 1.5，最低 0.5 m/s。这个判定和标题里主链路的走刃/搓雪标签是两套独立口径。</li><li><b>前后脚轨迹偏移：</b>两只脚轨迹按弯型图的物理画法算。在前脚已经滑过的路线上，按路径顺序找到和此刻后脚对应的点 q；<b>外偏距离</b> = (后脚位置 − q) · 弯外法向（左转取路径右侧、右转取左侧，按整个弯的转向定），大于 0 表示后脚往弯外偏，最大约 50 cm（= 两脚间距，板子横过来）；<b>外摆速度</b> = 外偏距离在 0.15 秒内的增长速度（m/s）。卡片上是本弯最大值。注意：路线是按「窗口开头板子顺着路线走」积分出来的，走刃的人也会有约 10 cm 的外偏（路线和板子转速的小偏差累积），看相对大小。</li><li><b>路线转速 ÷ 板子转速：</b>= 实测向心加速度 ÷（主链路速度 × 这只脚的角速度）= 这只脚的线速度 ÷ 主链路速度。等于 1 说明板子顺着弧线走（走刃）；明显小于 1 说明板子转得比实际路线快，在甩板尾或搓雪。纵轴 0~2，虚线是 1。卡片上是本弯中位数。</li><li><b>主链路速度：</b>弯起点 → 弯终点的整体速度（速度模型输出，不分左右脚），作参照。</li>
+<li><b>峰值旋转速率：</b>本弯 Yaw 变化最快的那一刻（°/s）。</li><li><b>线速度 / 转弯半径（左右脚各算）：</b>线速度 v = √(侧向加速度 a × 转弯半径 R)。a 用这只脚主链路校准后的侧向加速度（App 离心力同一个函数，1.5Hz 平滑）；R 用这只脚自己的轨迹（弯型图里的物理轨迹）每一刻的弯曲程度量出来（前后各约 0.2 秒三点定圆）。甩板尾时后脚走的弧和前脚不一样，半径不同，两只脚的线速度就会分开；走刃时两只脚和主链路速度基本一致。轨迹接近直线时半径很大，数值会冲高，画到图顶边为止。卡片上是本弯中位数。灰虚线是主链路速度作参照。</li><li><b>轨迹判定（标题旁）：</b>用前后脚轨迹偏移判断这个弯是走刃、搓雪还是甩板尾。<b>甩板尾</b> = 外偏距离超过误差带（确实有外偏）且外摆速度超过同类弯典型值（外偏是突然增加的），图上按每一刻标底色：绿 = 走刃（外偏在误差带内）、橙 = 搓雪（有外偏、外摆没超门槛）、红 = 甩板尾（两个条件同时满足）；<b>搓雪</b> = 有外偏但慢慢形成、没有突增；<b>走刃</b> = 外偏一直在误差带以内。误差带 15 cm（走刃的 Kin、滑手 A 每弯最大外偏中位 12.8 cm，是积分累积误差）；同类弯 = 同一人同一条刃，外摆门槛 = 这类弯最大外摆速度中位数 × 1.5，最低 0.5 m/s。这个判定和标题里主链路的走刃/搓雪标签是两套独立口径。</li><li><b>前后脚轨迹偏移：</b>两只脚轨迹按弯型图的物理画法算。在前脚已经滑过的路线上，按路径顺序找到和此刻后脚对应的点 q；<b>外偏距离</b> = (后脚位置 − q) · 弯外法向（左转取路径右侧、右转取左侧，按整个弯的转向定），大于 0 表示后脚往弯外偏，最大约 50 cm（= 两脚间距，板子横过来）；<b>外摆速度</b> = 外偏距离在 0.15 秒内的增长速度（m/s）。卡片上是本弯最大值。注意：路线是按「窗口开头板子顺着路线走」积分出来的，走刃的人也会有约 10 cm 的外偏（路线和板子转速的小偏差累积），看相对大小。</li><li><b>路线转速 ÷ 板子转速：</b>= 实测向心加速度 ÷（主链路速度 × 这只脚的角速度）= 这只脚的线速度 ÷ 主链路速度。等于 1 说明板子顺着弧线走（走刃）；明显小于 1 说明板子转得比实际路线快，在甩板尾或搓雪。纵轴 0~2，虚线是 1。卡片上是本弯中位数。</li><li><b>主链路速度：</b>弯起点 → 弯终点的整体速度（速度模型输出，不分左右脚），作参照。</li>
 <li>第二行是 App 主链路的逐弯分（同线上口径），方便和原始数据流对照。</li>
 </ul></details>
 <details class="def"><summary>数据口径</summary><ul>
@@ -1692,13 +1692,18 @@ function Run(sec,D,M){const n=D.sec.length,FR=M.front;
    g.textAlign='right';g.fillText('山顶',W-6,TP+12);g.fillText('↓ 下坡',W-6,H-6);g.textAlign='left'}
   function off(c,s){const P=prep(c);if(!P)return;const[g,W,H]=P,RM2=34,tx=x=>LM+(x-w0)/(w1-w0)*(W-LM-RM2),dd=t.do||[],uu=t.uo||[],ow=t.ow||0;
    const Ld=Math.max(20,...dd.filter(x=>x!=null).map(Math.abs))*1.1,Lu=Math.max(0.5,...uu.filter(x=>x!=null).map(Math.abs))*1.1,mid=TP+(H-TP-BM)/2,yd=y=>mid-y/Ld*((H-TP-BM)/2-3),yu=y=>mid-y/Lu*((H-TP-BM)/2-3);
-   g.fillStyle=C.sub;g.font='12px -apple-system,PingFang SC,sans-serif';g.fillText('前后脚轨迹偏移（实线 = 外偏 cm 左轴；橙虚线 = 外摆速度 m/s 右轴；红底 = 甩板尾时段）',6,14);
-   g.fillStyle=t.e==='前刃'?C.toeb:C.heelb;g.fillRect(tx(t.t0),TP,tx(t.t1)-tx(t.t0),H-TP-BM);
+   g.fillStyle=C.sub;g.font='12px -apple-system,PingFang SC,sans-serif';g.fillText('前后脚轨迹偏移（实线 外偏 cm；橙虚线 外摆 m/s；底色 绿走刃/橙搓雪/红甩板尾）',6,14);
+   // 逐刻分段：走刃 = 外偏 ≤ 误差带；搓雪 = 外偏 > 误差带且外摆 ≤ 门槛；甩板尾 = 外偏 > 误差带且外摆 > 门槛
+   {const CL=k=>{const d=dd[k],u=uu[k];if(d==null)return null;if(d<=t.db)return'走刃';return(u!=null&&u>t.uth)?'甩板尾':'搓雪'},COL={'走刃':'rgba(23,143,128,.16)','搓雪':'rgba(224,138,30,.18)','甩板尾':'rgba(229,57,53,.28)'},TC={'走刃':'#178f80','搓雪':'#c06d10','甩板尾':'#c62828'};
+    let k=0;while(k<dd.length){const c0=CL(k);let j=k;while(j+1<dd.length&&CL(j+1)===c0)j++;
+     if(c0){const xa=D.sec[ow+k],xb=D.sec[ow+Math.min(j+1,dd.length-1)];if(xb>=w0&&xa<=w1){const X0=tx(Math.max(xa,w0)),X1=tx(Math.min(xb,w1));g.fillStyle=COL[c0];g.fillRect(X0,TP,Math.max(1,X1-X0),H-TP-BM);
+      g.fillStyle=TC[c0];g.font='bold 10px sans-serif';if(X1-X0>26)g.fillText(c0,X0+3,H-BM-4);else if(c0==='甩板尾')g.fillText(c0,X0+2,TP+24)}}
+     k=j+1}}
    g.strokeStyle='#d9dde5';g.lineWidth=1;g.beginPath();g.moveTo(LM,mid);g.lineTo(W-RM2,mid);g.stroke();
    g.font='10px sans-serif';g.fillStyle=C.sub;g.textAlign='right';const sd_=Ld>60?40:Ld>25?20:10;for(let k=-Math.floor(Ld/sd_);k<=Math.floor(Ld/sd_);k++){const Y=yd(k*sd_);if(Y<TP+5||Y>H-BM-2)continue;g.fillText(k*sd_,LM-4,Y+3)}
    g.textAlign='left';g.fillStyle=C.toe;const su=Lu>2?1:0.5;for(let k=-Math.floor(Lu/su);k<=Math.floor(Lu/su);k++){const Y=yu(k*su);if(Y<TP+5||Y>H-BM-2)continue;g.fillText(k*su,W-RM2+4,Y+3)}
    g.save();g.beginPath();g.rect(LM,TP,W-LM-RM2,H-TP-BM);g.clip();
-   for(const[e0,e1]of(t.ev||[])){g.fillStyle='rgba(229,57,53,.18)';g.fillRect(tx(e0),TP,Math.max(2,tx(e1)-tx(e0)),H-TP-BM)}
+   g.strokeStyle='#b6bcc7';g.lineWidth=1;g.setLineDash([1,2]);for(const x of[t.t0,t.t1]){g.beginPath();g.moveTo(tx(x),TP);g.lineTo(tx(x),H-BM);g.stroke()}g.setLineDash([]);
    if(t.db!=null){g.strokeStyle='#1d2433';g.setLineDash([2,3]);g.lineWidth=1;g.beginPath();g.moveTo(LM,yd(t.db));g.lineTo(W-RM2,yd(t.db));g.stroke();g.fillStyle='#1d2433';g.font='10px sans-serif';g.fillText('误差带 '+t.db+' cm',LM+4,yd(t.db)-3)}
    if(t.uth!=null){g.strokeStyle=C.toe;g.setLineDash([2,3]);g.lineWidth=1;g.beginPath();g.moveTo(LM,yu(t.uth));g.lineTo(W-RM2,yu(t.uth));g.stroke();g.fillStyle=C.toe;g.font='10px sans-serif';g.textAlign='right';g.fillText('外摆门槛 '+t.uth+' m/s',W-RM2-4,yu(t.uth)-3);g.textAlign='left'}
    g.setLineDash([]);
