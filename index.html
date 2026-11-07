@@ -14,14 +14,14 @@ html{color-scheme:light}:root{--ink:#1d2433;--sub:#5b6577;--line:#e6e9ef;--bg:#f
 .chips.app span{background:#fff;border:1px solid var(--line)}
 .tg{display:grid;grid-template-columns:200px minmax(0,1fr);gap:10px;margin-top:8px;align-items:start}
 .lt video{width:200px;aspect-ratio:9/16;border-radius:8px;background:#000;display:block;cursor:pointer}.novid{width:200px;aspect-ratio:9/16;border-radius:8px;background:var(--bg);color:var(--sub);font-size:13px;display:flex;align-items:center;justify-content:center;border:1px dashed var(--line)}
-.rt{display:grid;grid-template-columns:1fr 1fr;gap:6px}.rt canvas{width:100%;height:172px;display:block;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:crosshair}
+.rt{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.7fr);gap:6px}.rt canvas{width:100%;height:114px;display:block;border:1px solid var(--line);border-radius:8px;background:#fff;cursor:crosshair}.rt canvas[data-p=track]{grid-row:span 3;height:354px}
 details.def{margin-top:8px;font-size:13px}details.def summary{cursor:pointer;color:var(--blue)}details.def li{margin:3px 0}
-@media(max-width:760px){.tg{grid-template-columns:1fr}.lt video,.novid{width:180px;margin:0 auto}.rt{grid-template-columns:1fr}}
+@media(max-width:760px){.tg{grid-template-columns:1fr}.lt video,.novid{width:180px;margin:0 auto}.rt{grid-template-columns:1fr}.rt canvas{height:150px}.rt canvas[data-p=track]{grid-row:auto;height:320px}}
 </style></head><body><div class="wrap">
 <h1>逐弯视频 × 双脚数据流</h1><div class="by">Heygo 团队 · 2026 年 11 月 7 日</div>
 <div class="card"><div class="key"><b>怎么看</b><ul>
 <li><b>每个弯一张卡：左边是这个弯的视频片段（弯起止前后各多留 0.4 秒，循环播放），右边是同一段时间的数据。</b>播放时右边四张图上的红线跟着视频走，弯型图上的圆圈是双脚此刻的位置。视频与传感器时间对齐沿用《视频逐弯核对》的结论（换刃时刻误差 0.2 秒以内）。</li>
-<li><b>右边四张图：</b>① 左右脚弯型（弯起点对齐、真实比例，淡色是弯前后多留的 0.4 秒）；② 左右脚 Yaw 角；③ 左右脚 Roll 立刃角（圆点 = 这只脚本弯立刃最大的位置）；④ 左右脚旋转速率。底色块 = 这个弯（橙色前刃、绿色后刃）。</li>
+<li><b>右边四张图：</b>① 左右脚弯型（山顶在上、下坡朝下，弯起点对齐、真实比例，淡色是弯前后多留的 0.4 秒）；② 左右脚 Yaw 角；③ 左右脚 Roll 立刃角（圆点 = 这只脚本弯立刃最大的位置）；④ 左右脚旋转速率。底色块 = 这个弯（橙色前刃、绿色后刃）。</li>
 <li><b>操作：</b>点视频暂停/继续；点曲线上任意位置，视频跳到那一刻；鼠标悬停看左右脚读数；顶上可以把速度调到 ¼×。</li>
 </ul></div>
 <details class="def"><summary>卡片上方几个数是怎么算的（每格「左脚 / 右脚」）</summary><ul>
@@ -825,7 +825,7 @@ function q(a,p){const v=a.filter(x=>x!=null).map(Math.abs).sort((x,y)=>x-y);retu
 function Run(sec,D){const n=D.sec.length;
  const inT=D.sec.map(s=>D.turns.some(t=>s>=t.t0-0.4&&s<=t.t1+0.4)),pk=k=>D[k+'L'].filter((_,i)=>inT[i]).concat(D[k+'R'].filter((_,i)=>inT[i]));
  const lim={yaw:Math.max(20,q(pk('yaw'),.99)*1.1),roll:Math.max(20,q(pk('roll'),.99)*1.1),rate:Math.max(40,q(pk('rate'),.99)*1.1)};
- const TT={track:'弯型（左右脚，弯起点对齐，下坡朝右）',yaw:'Yaw 角（°，正 = 向左转）',roll:'Roll 立刃角（°，+ 后刃 / − 前刃）',rate:'旋转速率（°/s）'};
+ const TT={track:'弯型（左右脚，起点对齐，上山下坡）',yaw:'Yaw 角（°，正 = 向左转）',roll:'Roll 立刃角（°，+ 后刃 / − 前刃）',rate:'旋转速率（°/s）'};
  function idx(s){let lo=0,hi=n-1;if(s<=D.sec[0])return 0;if(s>=D.sec[hi])return hi;while(hi-lo>1){const m=(lo+hi)>>1;if(D.sec[m]<s)lo=m;else hi=m}return lo}
  function Card(el,t){const v=el.querySelector('video'),cs=[...el.querySelectorAll('canvas')];
   const w0=t.c0!=null?t.c0:t.t0-0.4,w1=t.c0!=null?t.c1:t.t1+0.4,i0=idx(w0),i1=idx(w1),j0=idx(t.t0),j1=idx(t.t1);let hov=null;
@@ -850,14 +850,14 @@ function Run(sec,D){const n=D.sec.length;
    g.restore();g.strokeStyle=C.grid;g.strokeRect(LM+.5,TP+.5,W-LM-RM-1,H-TP-BM-1)}
   function tr(c,s){const P=prep(c);if(!P)return;const[g,W,H]=P;g.fillStyle=C.sub;g.font='12px -apple-system,PingFang SC,sans-serif';g.fillText(TT.track,6,14);
    const F={};let a=1e9,b=-1e9,cc=1e9,d=-1e9;
-   for(const sd of['L','R']){const X=D['X'+sd],Y=D['Y'+sd],x0=X[j0],y0=Y[j0];F[sd]=i=>[X[i]-x0,Y[i]-y0];for(let i=i0;i<=i1;i++){const[x,y]=F[sd](i);a=Math.min(a,x);b=Math.max(b,x);cc=Math.min(cc,y);d=Math.max(d,y)}}
+   for(const sd of['L','R']){const X=D['X'+sd],Y=D['Y'+sd],x0=X[j0],y0=Y[j0];F[sd]=i=>[Y[i]-y0,-(X[i]-x0)];for(let i=i0;i<=i1;i++){const[x,y]=F[sd](i);a=Math.min(a,x);b=Math.max(b,x);cc=Math.min(cc,y);d=Math.max(d,y)}}
    const AW=W-16,AH=H-TP-10,sc=Math.min(AW/Math.max(b-a,1),AH/Math.max(d-cc,1),60),ox=8+AW/2-sc*(a+b)/2,oy=TP+AH/2+sc*(cc+d)/2,P2=([x,y])=>[ox+sc*x,oy-sc*y];
    g.lineCap='round';
    for(const sd of['L','R']){for(const[from,to,al,lw]of[[i0,j0,.25,2],[j1,i1,.25,2],[j0,j1,1,3]]){g.strokeStyle=C[sd];g.globalAlpha=al;g.lineWidth=lw;g.beginPath();for(let i=from;i<=to;i++){const[X,Y]=P2(F[sd](i));i===from?g.moveTo(X,Y):g.lineTo(X,Y)}g.stroke()}
     g.globalAlpha=1;const[X0,Y0]=P2(F[sd](j0));g.fillStyle=C[sd];g.beginPath();g.arc(X0,Y0,3,0,7);g.fill();
     const pt=s!=null?s:hov;if(pt!=null){const[X,Y]=P2(F[sd](idx(pt)));g.strokeStyle=C[sd];g.fillStyle='#fff';g.lineWidth=2;g.beginPath();g.arc(X,Y,5,0,7);g.fill();g.stroke()}}
    g.strokeStyle='#888';g.lineWidth=1;g.beginPath();g.moveTo(10,H-8);g.lineTo(10+sc*2,H-8);g.stroke();g.fillStyle='#888';g.font='10px sans-serif';g.fillText('2 米',12,H-11);
-   g.textAlign='right';g.fillText('下坡 →',W-6,H-6);g.textAlign='left'}
+   g.textAlign='right';g.fillText('山顶',W-6,TP+12);g.fillText('↓ 下坡',W-6,H-6);g.textAlign='left'}
   function draw(){const s=now(),ss=s!=null&&!(v.paused&&v.currentTime===0)?s:null;cs.forEach(c=>c.dataset.p==='track'?tr(c,ss):ts(c,c.dataset.p,ss))}
   function tAt(c,e){const r=c.getBoundingClientRect();return w0+(e.clientX-r.left-LM)/(r.width-LM-RM)*(w1-w0)}
   cs.forEach(c=>{if(c.dataset.p==='track')return;c.addEventListener('mousemove',e=>{hov=tAt(c,e);draw()});c.addEventListener('mouseleave',()=>{hov=null;draw()});
