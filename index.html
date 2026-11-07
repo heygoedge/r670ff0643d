@@ -20,8 +20,8 @@ details.def{margin-top:8px;font-size:13px}details.def summary{cursor:pointer;col
 </style></head><body><div class="wrap">
 <h1>逐弯视频 × 双脚数据流</h1><div class="by">Heygo 团队 · 2026 年 11 月 7 日</div>
 <div class="card"><div class="key"><b>怎么看</b><ul>
-<li><b>每个弯一张卡：左边是这个弯的视频片段（弯起止前后各多留 0.4 秒，循环播放），右边是同一段时间的数据。</b>播放时右边曲线上的红线跟着视频走，弯型图上的圆圈是此刻两只脚的位置。视频与传感器时间对齐沿用《视频逐弯核对》的结论（换刃时刻误差 0.2 秒以内）。</li>
-<li><b>右边四张图：</b>① 弯型：左右脚各自的轨迹（蓝左、红右；山顶在上、下坡朝下、真实比例；实线是这个弯，淡色是弯前后多留的 0.4 秒），细灰线是主链路的雪板轨迹（和 App 弯型同口径）。每只脚用自己的 Yaw 加主链路速度积分，弯起点放在板上前脚/后脚的位置；两条脚轨迹分开多少来自两只脚朝向差的累积，反映两脚转动是否一致，不是两脚真实的左右距离。圆圈是此刻两只脚的位置；② 左右脚 Yaw 角；③ 左右脚 Roll 立刃角（圆点 = 这只脚本弯立刃最大的位置）；④ 左右脚旋转速率；⑤ 左右脚线速度（每只脚的向心加速度 ÷ 这只脚的角速度，灰色虚线是主链路速度作参照）。底色块 = 这个弯（橙色前刃、绿色后刃）。<b>蓝/红点线 = 左/右脚换刃点</b>：这只脚 Roll 从上一弯的刃穿过 0、换到本弯刃的那一刻（从本弯立刃峰值往前找最后一次过 0，最多找到弯起点前 1 秒，找不到就不画）；弯型图上对应位置是同色小方块。弯的起止是按朝向切的，所以换刃点不一定在底色块的起点。<b>黑色虚线 = 滚落线</b>：板头正对山下的那一刻（雪板朝向转到本弯起点和终点朝向正中间的时刻），弯型图上对应位置画一道黑横线。滚落线前是弯的上半段，滚落线后是下半段。</li>
+<li><b>每个弯一张卡：左边是这个弯的视频片段（弯起止前后各多留 0.4 秒，循环播放），右边是同一段时间的数据。</b>播放时右边曲线上的紫色竖线跟着视频走，弯型图上的圆圈是此刻两只脚的位置。视频与传感器时间对齐沿用《视频逐弯核对》的结论（换刃时刻误差 0.2 秒以内）。</li>
+<li><b>右边四张图：</b>① 弯型：左右脚各自的轨迹（蓝左、红右；山顶在上、下坡朝下、真实比例；实线是这个弯，淡色是弯前后多留的 0.4 秒），细灰线是主链路的雪板轨迹（和 App 弯型同口径）。每只脚用自己的 Yaw 加主链路速度积分，弯起点放在板上前脚/后脚的位置；两条脚轨迹分开多少来自两只脚朝向差的累积，反映两脚转动是否一致，不是两脚真实的左右距离。圆圈是此刻两只脚的位置；② 左右脚 Yaw 角；③ 左右脚 Roll 立刃角（圆点 = 这只脚本弯立刃最大的位置）；④ 左右脚旋转速率；⑤ 左右脚线速度（每只脚的向心加速度 ÷ 这只脚的角速度，灰色虚线是主链路速度作参照）。底色块 = 这个弯（橙色前刃、绿色后刃）。<b>蓝/红竖线 = 左/右脚换刃</b>：这只脚 Roll 从上一弯的刃穿过 0、换到本弯刃的那一刻（从本弯立刃峰值往前找最后一次过 0，最多找到弯起点前 1 秒，找不到就不画）；弯型图上在这只脚轨迹的对应位置画一道同色横线。弯的起止是按朝向切的，所以换刃点不一定在底色块的起点。<b>黑色虚线 = 滚落线</b>：板头正对山下的那一刻（雪板朝向转到本弯起点和终点朝向正中间的时刻），弯型图上对应位置画一道黑横线。滚落线前是弯的上半段，滚落线后是下半段。</li>
 <li><b>操作：</b>点视频暂停/继续；点曲线上任意位置，视频跳到那一刻；鼠标悬停看左右脚读数；顶上可以把速度调到 ¼×。</li>
 </ul></div>
 <details class="def"><summary>卡片上方几个数是怎么算的（每格「左脚 / 右脚」）</summary><ul>
@@ -1653,7 +1653,7 @@ function Run(sec,D,M){const n=D.sec.length,FR=M.front;
    for(let k=SP?0:-Math.floor(L/st);k<=Math.floor(L/st);k++){const Y=ty(k*st);if(Y<TP+(id==='roll'?16:5)||Y>H-BM-(id==='roll'?13:2))continue;g.fillText(k*st,LM-4,Y+3)}
    if(id==='roll'){g.fillStyle=C.heel;g.fillText('后刃',LM-4,TP+9);g.fillStyle=C.toe;g.fillText('前刃',LM-4,H-BM-1)}g.textAlign='left';
    g.save();g.beginPath();g.rect(LM,TP,W-LM-RM,H-TP-BM);g.clip();
-   for(const sd of['L','R']){const te=t[sd].tec;if(te==null)continue;const X=tx(te);g.strokeStyle=C[sd];g.lineWidth=1.3;g.setLineDash([2,2]);g.beginPath();g.moveTo(X,TP);g.lineTo(X,H-BM);g.stroke();g.setLineDash([]);g.fillStyle=C[sd];g.font='10px sans-serif';g.fillText('换刃',X+2,H-BM-3-(sd==='R'?11:0))}
+   for(const sd of['L','R']){const te=t[sd].tec;if(te==null)continue;const X=tx(te);g.strokeStyle=C[sd];g.lineWidth=1.6;g.beginPath();g.moveTo(X,TP);g.lineTo(X,H-BM);g.stroke();g.fillStyle=C[sd];g.font='10px sans-serif';g.fillText('换刃',X+2,H-BM-3-(sd==='R'?11:0))}
    if(t.tfl!=null){const X=tx(t.tfl);g.strokeStyle='#1d2433';g.lineWidth=1.2;g.setLineDash([5,3]);g.beginPath();g.moveTo(X,TP);g.lineTo(X,H-BM);g.stroke();g.setLineDash([]);g.fillStyle='#1d2433';g.font='10px sans-serif';g.fillText('滚落线',X+3,TP+10)}
    if(SP){g.strokeStyle='#9aa3b2';g.setLineDash([4,3]);g.lineWidth=1.3;g.beginPath();for(let i=i0;i<=i1;i++){const X=tx(D.sec[i]),Y=ty(Math.min(L,D.spd[i]));i===i0?g.moveTo(X,Y):g.lineTo(X,Y)}g.stroke();g.setLineDash([])}
    for(const[sd,a]of SR){g.strokeStyle=C[sd];g.lineWidth=1.8;g.beginPath();let pen=false;
@@ -1662,7 +1662,7 @@ function Run(sec,D,M){const n=D.sec.length,FR=M.front;
    if(hov!=null){const i=idx(hov),X=tx(hov);g.strokeStyle='#9aa3b2';g.lineWidth=1;g.beginPath();g.moveTo(X,TP);g.lineTo(X,H-BM);g.stroke();
     let xx=X+5;if(xx>W-80)xx=X-78;g.fillStyle='rgba(255,255,255,.88)';g.fillRect(xx-2,TP+2,82,SP?38:26);g.font='11px sans-serif';
     SR.forEach(([sd,a],j)=>{g.fillStyle=C[sd];g.fillText((sd==='L'?'左 ':sd==='R'?'右 ':'')+fmt(a[i],id==='rate'?0:1)+(SP?' km/h':''),xx,TP+13+j*12)});if(SP){g.fillStyle='#7d8696';g.fillText('主链路 '+fmt(D.spd[i],1),xx,TP+37)}}
-   if(s!=null){const X=tx(s);g.strokeStyle='#e0303a';g.lineWidth=1.5;g.beginPath();g.moveTo(X,TP);g.lineTo(X,H-BM);g.stroke()}
+   if(s!=null){const X=tx(s);g.strokeStyle='#8a3ffc';g.lineWidth=2;g.beginPath();g.moveTo(X,TP);g.lineTo(X,H-BM);g.stroke()}
    g.restore();g.strokeStyle=C.grid;g.strokeRect(LM+.5,TP+.5,W-LM-RM-1,H-TP-BM-1)}
   function tr(c,s){const P=prep(c);if(!P)return;const[g,W,H]=P;g.fillStyle=C.sub;g.font='12px -apple-system,PingFang SC,sans-serif';g.fillText(TT.track,6,14);
    // 旋转 -90°：山顶在上、下坡朝下（不镜像）。灰 = 主链路雪板轨迹；蓝/红 = 左/右脚各自 Yaw + 主链路速度积分，弯起点放在板上的前/后脚位置（±0.25 m）
@@ -1676,12 +1676,12 @@ function Run(sec,D,M){const n=D.sec.length,FR=M.front;
    g.strokeStyle='#c4cad6';g.lineWidth=1.5;path(FB,i0,i1);
    for(const sd of['L','R']){g.strokeStyle=C[sd];g.globalAlpha=.25;g.lineWidth=2;path(FF[sd],i0,j0);path(FF[sd],j1,i1);g.globalAlpha=1;g.lineWidth=3;path(FF[sd],j0,j1);
     const[Xs,Ys]=P2(FF[sd](j0));g.fillStyle=C[sd];g.beginPath();g.arc(Xs,Ys,3,0,7);g.fill()}
-   for(const sd of['L','R']){const te=t[sd].tec;if(te==null)continue;const[Xe,Ye]=P2(FF[sd](idx(te)));g.fillStyle=C[sd];g.strokeStyle='#fff';g.lineWidth=1.5;g.fillRect(Xe-4,Ye-4,8,8);g.strokeRect(Xe-4,Ye-4,8,8)}
+   for(const sd of['L','R']){const te=t[sd].tec;if(te==null)continue;const ie=idx(te),[Xe,Ye]=P2(FF[sd](ie)),[Xa,Ya]=P2(FF[sd](Math.max(i0,ie-2))),[Xb,Yb]=P2(FF[sd](Math.min(i1,ie+2))),an=Math.atan2(Yb-Ya,Xb-Xa)+Math.PI/2,dx=Math.cos(an)*11,dy=Math.sin(an)*11;g.strokeStyle=C[sd];g.lineWidth=2.5;g.beginPath();g.moveTo(Xe-dx,Ye-dy);g.lineTo(Xe+dx,Ye+dy);g.stroke();g.fillStyle=C[sd];g.font='10px sans-serif';g.fillText('换刃',Xe+(sd==='L'?-36:14),Ye+3)}
    if(t.tfl!=null){const jf=idx(t.tfl),[Xf,Yf]=P2(FB(jf));g.strokeStyle='#1d2433';g.lineWidth=2;g.beginPath();g.moveTo(Xf-10,Yf);g.lineTo(Xf+10,Yf);g.stroke();g.fillStyle='#1d2433';g.font='10px sans-serif';g.fillText('滚落线',Xf+13,Yf+3)}
    const pt=s!=null?s:hov;if(pt!=null){const ib=idx(pt);for(const sd of['L','R']){const[X,Y]=P2(FF[sd](ib));g.strokeStyle=C[sd];g.fillStyle='#fff';g.lineWidth=2;g.beginPath();g.arc(X,Y,5,0,7);g.fill();g.stroke()}}
    g.font='11px sans-serif';const lg=[[C.L,'左脚'+(FR==='L'?'（前）':'（后）')],[C.R,'右脚'+(FR==='R'?'（前）':'（后）')],['#c4cad6','雪板']];let lx=10;
    for(const[col,tx_]of lg){g.strokeStyle=col;g.lineWidth=3;g.beginPath();g.moveTo(lx,H-30);g.lineTo(lx+14,H-30);g.stroke();g.fillStyle=C.sub;g.fillText(tx_,lx+18,H-26);lx+=18+g.measureText(tx_).width+12}
-   g.fillStyle='#5b6577';g.fillRect(lx,H-34,8,8);g.fillText('换刃点',lx+12,H-26);
+   
    g.strokeStyle='#888';g.lineWidth=1;g.beginPath();g.moveTo(10,H-8);g.lineTo(10+sc*2,H-8);g.stroke();g.fillStyle='#888';g.font='10px sans-serif';g.fillText('2 米',12,H-11);
    g.textAlign='right';g.fillText('山顶',W-6,TP+12);g.fillText('↓ 下坡',W-6,H-6);g.textAlign='left'}
   function draw(){const s=now(),ss=s!=null&&!(v.paused&&v.currentTime===0)?s:null;cs.forEach(c=>c.dataset.p==='track'?tr(c,ss):ts(c,c.dataset.p,ss))}
