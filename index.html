@@ -20,8 +20,8 @@ details.def{margin-top:8px;font-size:13px}details.def summary{cursor:pointer;col
 </style></head><body><div class="wrap">
 <h1>逐弯视频 × 双脚数据流</h1><div class="by">Heygo 团队 · 2026 年 11 月 7 日</div>
 <div class="card"><div class="key"><b>怎么看</b><ul>
-<li><b>每个弯一张卡：左边是这个弯的视频片段（弯起止前后各多留 0.4 秒，循环播放），右边是同一段时间的数据。</b>播放时右边曲线上的红线跟着视频走，弯型图上的雪板图标是此刻雪板的位置和朝向。视频与传感器时间对齐沿用《视频逐弯核对》的结论（换刃时刻误差 0.2 秒以内）。</li>
-<li><b>右边四张图：</b>① 弯型：主链路的雪板轨迹（和 App 弯型同口径，山顶在上、下坡朝下、真实比例；彩色段是这个弯，灰色是弯前后多留的 0.4 秒，黑点是弯起点和终点），雪板图标跟着视频走，标出前脚和后脚；② 左右脚 Yaw 角；③ 左右脚 Roll 立刃角（圆点 = 这只脚本弯立刃最大的位置）；④ 左右脚旋转速率；⑤ 左右脚线速度（每只脚的向心加速度 ÷ 这只脚的角速度，灰色虚线是主链路速度作参照）。底色块 = 这个弯（橙色前刃、绿色后刃）。<b>黑色虚线 = 滚落线</b>：板头正对山下的那一刻（雪板朝向转到本弯起点和终点朝向正中间的时刻），弯型图上对应位置画一道黑横线。滚落线前是弯的上半段，滚落线后是下半段。</li>
+<li><b>每个弯一张卡：左边是这个弯的视频片段（弯起止前后各多留 0.4 秒，循环播放），右边是同一段时间的数据。</b>播放时右边曲线上的红线跟着视频走，弯型图上的圆圈是此刻两只脚的位置。视频与传感器时间对齐沿用《视频逐弯核对》的结论（换刃时刻误差 0.2 秒以内）。</li>
+<li><b>右边四张图：</b>① 弯型：左右脚各自的轨迹（蓝左、红右；山顶在上、下坡朝下、真实比例；实线是这个弯，淡色是弯前后多留的 0.4 秒），细灰线是主链路的雪板轨迹（和 App 弯型同口径）。每只脚用自己的 Yaw 加主链路速度积分，弯起点放在板上前脚/后脚的位置；两条脚轨迹分开多少来自两只脚朝向差的累积，反映两脚转动是否一致，不是两脚真实的左右距离。圆圈是此刻两只脚的位置；② 左右脚 Yaw 角；③ 左右脚 Roll 立刃角（圆点 = 这只脚本弯立刃最大的位置）；④ 左右脚旋转速率；⑤ 左右脚线速度（每只脚的向心加速度 ÷ 这只脚的角速度，灰色虚线是主链路速度作参照）。底色块 = 这个弯（橙色前刃、绿色后刃）。<b>黑色虚线 = 滚落线</b>：板头正对山下的那一刻（雪板朝向转到本弯起点和终点朝向正中间的时刻），弯型图上对应位置画一道黑横线。滚落线前是弯的上半段，滚落线后是下半段。</li>
 <li><b>操作：</b>点视频暂停/继续；点曲线上任意位置，视频跳到那一刻；鼠标悬停看左右脚读数；顶上可以把速度调到 ¼×。</li>
 </ul></div>
 <details class="def"><summary>卡片上方几个数是怎么算的（每格「左脚 / 右脚」）</summary><ul>
@@ -34,7 +34,7 @@ details.def{margin-top:8px;font-size:13px}details.def summary{cursor:pointer;col
 <details class="def"><summary>数据口径</summary><ul>
 <li>左右脚数据是主链路校准后的两脚时序（20Hz）。设备没有磁力计，Yaw 只看相对变化：去掉了整趟线性漂移和均值，0 ≈ 这趟的平均方向。</li>
 <li>Roll 是脚上测到的立刃角，包含脚踝和雪鞋的倾斜，前刃一侧通常比板子真实立刃角大；App 的「立刃角」用的是板子立刃角（形变模型），口径不同。</li>
-<li>旋转速率 = Yaw 经 3Hz 低通后对时间求导。两只脚装在同一块板上，所以弯型只画一条雪板轨迹；两只脚的差异看 Yaw、Roll、旋转速率三张图。</li>
+<li>旋转速率 = Yaw 经 3Hz 低通后对时间求导。左右脚轨迹 = 各自 Yaw（去掉安装角差）+ 主链路速度积分；没用左右脚线速度积分，因为它不设门槛、有极端值。</li>
 <li>弯的切分、刃、走刃/搓雪、App 分数都是 11/7 主链路重跑的结果，个别趟的弯数和《视频逐弯核对》（10/3 版）不完全一样，所以片段是按新的弯界重新切的。</li>
 </ul></details></div>
 <div class="pick"><select id="pick"><option value="a1">滑手 A（反脚）· 8 月 14 日 第 1 趟</option><option value="a2">滑手 A（反脚）· 8 月 14 日 第 2 趟</option><option value="a3">滑手 A（反脚）· 8 月 14 日 第 3 趟</option><option value="b1">Kin（正脚）· 8 月 21 日 第 1 趟</option><option value="b2">Kin（正脚）· 8 月 21 日 第 2 趟</option><option value="b3">Kin（正脚）· 8 月 21 日 第 3 趟</option><option value="c1">李杨（反脚）· 6 月 30 日 第 1 趟</option><option value="c2">李杨（反脚）· 6 月 30 日 第 2 趟</option><option value="c3">李杨（反脚）· 6 月 30 日 第 3 趟</option><option value="d1">周占双（正脚）· 7 月 7 日 第 5 趟</option><option value="e1">Allen（反脚）· 6 月 16 日 第 1 趟</option><option value="e2">Vanessa（反脚）· 7 月 28 日 第 1 趟</option><option value="e3">小白（反脚）· 7 月 28 日 第 4 趟</option><option value="e4">Will（正脚）· 7 月 29 日 第 2 趟</option><option value="e6">ranran（正脚）· 11 月 3 日 第 13 趟</option><option value="e5">王春珊（反脚）· 7 月 7 日 第 1 趟</option></select><div class="ctl"><span class="lb">速度</span><button data-rate="0.25">¼×</button><button data-rate="0.5">½×</button><button data-rate="1" class="on">1×</button></div>
@@ -1638,7 +1638,7 @@ function q(a,p){const v=a.filter(x=>x!=null).map(Math.abs).sort((x,y)=>x-y);retu
 function Run(sec,D,M){const n=D.sec.length,FR=M.front;
  const inT=D.sec.map(s=>D.turns.some(t=>s>=t.t0-0.4&&s<=t.t1+0.4)),pk=k=>k==='spd'?D.spd.filter((_,i)=>inT[i]):k==='lv'?D.lvL.filter((_,i)=>inT[i]).concat(D.lvR.filter((_,i)=>inT[i])):D[k+'L'].filter((_,i)=>inT[i]).concat(D[k+'R'].filter((_,i)=>inT[i]));
  const lim={yaw:Math.max(20,q(pk('yaw'),.99)*1.1),roll:Math.max(20,q(pk('roll'),.99)*1.1),rate:Math.max(40,q(pk('rate'),.99)*1.1),lv:Math.max(20,q(pk('spd'),.99)*2.5)};
- const TT={track:'弯型（雪板轨迹，上山下坡）',yaw:'Yaw 角（°，正 = 向左转）',roll:'Roll 立刃角（°，+ 后刃 / − 前刃）',rate:'旋转速率（°/s）',lv:'线速度（km/h，= 向心加速度 ÷ 角速度；灰虚线 = 主链路速度）'};
+ const TT={track:'弯型（左右脚轨迹，上山下坡）',yaw:'Yaw 角（°，正 = 向左转）',roll:'Roll 立刃角（°，+ 后刃 / − 前刃）',rate:'旋转速率（°/s）',lv:'线速度（km/h，= 向心加速度 ÷ 角速度；灰虚线 = 主链路速度）'};
  function idx(s){let lo=0,hi=n-1;if(s<=D.sec[0])return 0;if(s>=D.sec[hi])return hi;while(hi-lo>1){const m=(lo+hi)>>1;if(D.sec[m]<s)lo=m;else hi=m}return lo}
  function Card(el,t){const v=el.querySelector('video'),cs=[...el.querySelectorAll('canvas')];
   const w0=t.c0!=null?t.c0:t.t0-0.4,w1=t.c0!=null?t.c1:t.t1+0.4,i0=idx(w0),i1=idx(w1),j0=idx(t.t0),j1=idx(t.t1);let hov=null;
@@ -1664,21 +1664,21 @@ function Run(sec,D,M){const n=D.sec.length,FR=M.front;
    if(s!=null){const X=tx(s);g.strokeStyle='#e0303a';g.lineWidth=1.5;g.beginPath();g.moveTo(X,TP);g.lineTo(X,H-BM);g.stroke()}
    g.restore();g.strokeStyle=C.grid;g.strokeRect(LM+.5,TP+.5,W-LM-RM-1,H-TP-BM-1)}
   function tr(c,s){const P=prep(c);if(!P)return;const[g,W,H]=P;g.fillStyle=C.sub;g.font='12px -apple-system,PingFang SC,sans-serif';g.fillText(TT.track,6,14);
-   // 主链路雪板轨迹，旋转 -90°：山顶在上、下坡朝下（不镜像）
-   const x0=D.X[j0],y0=D.Y[j0],F=i=>[D.Y[i]-y0,-(D.X[i]-x0)];let a=1e9,b=-1e9,cc=1e9,d=-1e9;
-   for(let i=i0;i<=i1;i++){const[x,y]=F(i);a=Math.min(a,x);b=Math.max(b,x);cc=Math.min(cc,y);d=Math.max(d,y)}
+   // 旋转 -90°：山顶在上、下坡朝下（不镜像）。灰 = 主链路雪板轨迹；蓝/红 = 左/右脚各自 Yaw + 主链路速度积分，弯起点放在板上的前/后脚位置（±0.25 m）
+   const x0=D.X[j0],y0=D.Y[j0],R=([x,y])=>[y-y0,-(x-x0)];
+   const ha=Math.max(i0,j0-2),hb=Math.min(i1,j0+2);let hx=D.X[hb]-D.X[ha],hy=D.Y[hb]-D.Y[ha];const hn=Math.hypot(hx,hy)||1;hx/=hn;hy/=hn;
+   const bk=FR==='L'?'R':'L',OFF={[FR]:0.25,[bk]:-0.25};
+   const FB=i=>R([D.X[i],D.Y[i]]),FF={};for(const sd of['L','R'])FF[sd]=i=>R([D['X'+sd][i]-D['X'+sd][j0]+x0+OFF[sd]*hx,D['Y'+sd][i]-D['Y'+sd][j0]+y0+OFF[sd]*hy]);
+   let a=1e9,b=-1e9,cc=1e9,d=-1e9;for(const f of[FB,FF.L,FF.R])for(let i=i0;i<=i1;i++){const[x,y]=f(i);a=Math.min(a,x);b=Math.max(b,x);cc=Math.min(cc,y);d=Math.max(d,y)}
    const AW=W-16,AH=H-TP-40,sc=Math.min(AW/Math.max(b-a,1),AH/Math.max(d-cc,1),60),ox=8+AW/2-sc*(a+b)/2,oy=TP+8+AH/2+sc*(cc+d)/2,P2=([x,y])=>[ox+sc*x,oy-sc*y];
-   g.lineCap='round';const ec=t.e==='前刃'?C.toe:C.heel;
-   for(const[from,to,col,lw]of[[i0,j0,'#c4cad6',3],[j1,i1,'#c4cad6',3],[j0,j1,ec,4]]){g.strokeStyle=col;g.lineWidth=lw;g.beginPath();for(let i=from;i<=to;i++){const[X,Y]=P2(F(i));i===from?g.moveTo(X,Y):g.lineTo(X,Y)}g.stroke()}
-   for(const k of[j0,j1]){const[X,Y]=P2(F(k));g.fillStyle='#1d2433';g.beginPath();g.arc(X,Y,3,0,7);g.fill()}
-   if(t.tfl!=null){const jf=idx(t.tfl),[Xf,Yf]=P2(F(jf));g.strokeStyle='#1d2433';g.lineWidth=2;g.beginPath();g.moveTo(Xf-10,Yf);g.lineTo(Xf+10,Yf);g.stroke();g.fillStyle='#1d2433';g.font='10px sans-serif';g.fillText('滚落线',Xf+13,Yf+3)}
-   const pt=s!=null?s:hov,ib=pt!=null?idx(pt):j0,ia=Math.max(i0,ib-2),ic=Math.min(i1,ib+2),[Xa,Ya]=P2(F(ia)),[Xc,Yc]=P2(F(ic)),[Xb,Yb]=P2(F(ib)),an=Math.atan2(Yc-Ya,Xc-Xa);
-   const BL=Math.max(1.55*sc,34),BW=Math.max(8,0.28*sc),bk=FR==='L'?'R':'L';
-   g.save();g.translate(Xb,Yb);g.rotate(an);g.globalAlpha=pt!=null?1:0.45;g.fillStyle='#1d2433';g.beginPath();if(g.roundRect)g.roundRect(-BL/2,-BW/2,BL,BW,BW/2);else g.rect(-BL/2,-BW/2,BL,BW);g.fill();
-   for(const[sd,xx]of[[FR,BL*0.22],[bk,-BL*0.22]]){g.fillStyle=C[sd];g.strokeStyle='#fff';g.lineWidth=1.5;g.beginPath();g.arc(xx,0,Math.max(3.5,BW*0.42),0,7);g.fill();g.stroke()}
-   g.restore();g.globalAlpha=1;
-   g.font='11px sans-serif';g.fillStyle=C[FR];g.beginPath();g.arc(12,H-30,4,0,7);g.fill();g.fillStyle=C.sub;g.fillText('前脚（'+(FR==='L'?'左':'右')+'）',20,H-26);
-   g.fillStyle=C[bk];g.beginPath();g.arc(92,H-30,4,0,7);g.fill();g.fillStyle=C.sub;g.fillText('后脚（'+(bk==='L'?'左':'右')+'）',100,H-26);
+   g.lineCap='round';const path=(f,from,to)=>{g.beginPath();for(let i=from;i<=to;i++){const[X,Y]=P2(f(i));i===from?g.moveTo(X,Y):g.lineTo(X,Y)}g.stroke()};
+   g.strokeStyle='#c4cad6';g.lineWidth=1.5;path(FB,i0,i1);
+   for(const sd of['L','R']){g.strokeStyle=C[sd];g.globalAlpha=.25;g.lineWidth=2;path(FF[sd],i0,j0);path(FF[sd],j1,i1);g.globalAlpha=1;g.lineWidth=3;path(FF[sd],j0,j1);
+    const[Xs,Ys]=P2(FF[sd](j0));g.fillStyle=C[sd];g.beginPath();g.arc(Xs,Ys,3,0,7);g.fill()}
+   if(t.tfl!=null){const jf=idx(t.tfl),[Xf,Yf]=P2(FB(jf));g.strokeStyle='#1d2433';g.lineWidth=2;g.beginPath();g.moveTo(Xf-10,Yf);g.lineTo(Xf+10,Yf);g.stroke();g.fillStyle='#1d2433';g.font='10px sans-serif';g.fillText('滚落线',Xf+13,Yf+3)}
+   const pt=s!=null?s:hov;if(pt!=null){const ib=idx(pt);for(const sd of['L','R']){const[X,Y]=P2(FF[sd](ib));g.strokeStyle=C[sd];g.fillStyle='#fff';g.lineWidth=2;g.beginPath();g.arc(X,Y,5,0,7);g.fill();g.stroke()}}
+   g.font='11px sans-serif';const lg=[[C.L,'左脚'+(FR==='L'?'（前）':'（后）')],[C.R,'右脚'+(FR==='R'?'（前）':'（后）')],['#c4cad6','雪板']];let lx=10;
+   for(const[col,tx_]of lg){g.strokeStyle=col;g.lineWidth=3;g.beginPath();g.moveTo(lx,H-30);g.lineTo(lx+14,H-30);g.stroke();g.fillStyle=C.sub;g.fillText(tx_,lx+18,H-26);lx+=18+g.measureText(tx_).width+12}
    g.strokeStyle='#888';g.lineWidth=1;g.beginPath();g.moveTo(10,H-8);g.lineTo(10+sc*2,H-8);g.stroke();g.fillStyle='#888';g.font='10px sans-serif';g.fillText('2 米',12,H-11);
    g.textAlign='right';g.fillText('山顶',W-6,TP+12);g.fillText('↓ 下坡',W-6,H-6);g.textAlign='left'}
   function draw(){const s=now(),ss=s!=null&&!(v.paused&&v.currentTime===0)?s:null;cs.forEach(c=>c.dataset.p==='track'?tr(c,ss):ts(c,c.dataset.p,ss))}
