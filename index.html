@@ -20,8 +20,8 @@ details.def{margin-top:8px;font-size:13px}details.def summary{cursor:pointer;col
 </style></head><body><div class="wrap">
 <h1>逐弯视频 × 双脚数据流</h1><div class="by">Heygo 团队 · 2026 年 11 月 7 日</div>
 <div class="card"><div class="key"><b>怎么看</b><ul>
-<li><b>每个弯一张卡：左边是这个弯的视频片段（弯起止前后各多留 0.4 秒，循环播放），右边是同一段时间的数据。</b>播放时右边四张图上的红线跟着视频走，弯型图上的圆圈是双脚此刻的位置。视频与传感器时间对齐沿用《视频逐弯核对》的结论（换刃时刻误差 0.2 秒以内）。</li>
-<li><b>右边四张图：</b>① 左右脚弯型（山顶在上、下坡朝下，弯起点对齐、真实比例，淡色是弯前后多留的 0.4 秒）；② 左右脚 Yaw 角；③ 左右脚 Roll 立刃角（圆点 = 这只脚本弯立刃最大的位置）；④ 左右脚旋转速率。底色块 = 这个弯（橙色前刃、绿色后刃）。</li>
+<li><b>每个弯一张卡：左边是这个弯的视频片段（弯起止前后各多留 0.4 秒，循环播放），右边是同一段时间的数据。</b>播放时右边曲线上的红线跟着视频走，弯型图上的雪板图标是此刻雪板的位置和朝向。视频与传感器时间对齐沿用《视频逐弯核对》的结论（换刃时刻误差 0.2 秒以内）。</li>
+<li><b>右边四张图：</b>① 弯型：主链路的雪板轨迹（和 App 弯型同口径，山顶在上、下坡朝下、真实比例；彩色段是这个弯，灰色是弯前后多留的 0.4 秒，黑点是弯起点和终点），雪板图标跟着视频走，标出前脚和后脚；② 左右脚 Yaw 角；③ 左右脚 Roll 立刃角（圆点 = 这只脚本弯立刃最大的位置）；④ 左右脚旋转速率。底色块 = 这个弯（橙色前刃、绿色后刃）。</li>
 <li><b>操作：</b>点视频暂停/继续；点曲线上任意位置，视频跳到那一刻；鼠标悬停看左右脚读数；顶上可以把速度调到 ¼×。</li>
 </ul></div>
 <details class="def"><summary>卡片上方几个数是怎么算的（每格「左脚 / 右脚」）</summary><ul>
@@ -34,7 +34,7 @@ details.def{margin-top:8px;font-size:13px}details.def summary{cursor:pointer;col
 <details class="def"><summary>数据口径</summary><ul>
 <li>左右脚数据是主链路校准后的两脚时序（20Hz）。设备没有磁力计，Yaw 只看相对变化：去掉了整趟线性漂移和均值，0 ≈ 这趟的平均方向。</li>
 <li>Roll 是脚上测到的立刃角，包含脚踝和雪鞋的倾斜，前刃一侧通常比板子真实立刃角大；App 的「立刃角」用的是板子立刃角（形变模型），口径不同。</li>
-<li>旋转速率 = Yaw 经 3Hz 低通后对时间求导。左右脚弯型用各自的 Yaw 加上主链路速度积分得到。</li>
+<li>旋转速率 = Yaw 经 3Hz 低通后对时间求导。两只脚装在同一块板上，所以弯型只画一条雪板轨迹；两只脚的差异看 Yaw、Roll、旋转速率三张图。</li>
 <li>弯的切分、刃、走刃/搓雪、App 分数都是 11/7 主链路重跑的结果，个别趟的弯数和《视频逐弯核对》（10/3 版）不完全一样，所以片段是按新的弯界重新切的。</li>
 </ul></details></div>
 <div class="pick"><select id="pick"><option value="a1">滑手 A（反脚）· 8 月 14 日 第 1 趟</option><option value="a2">滑手 A（反脚）· 8 月 14 日 第 2 趟</option><option value="a3">滑手 A（反脚）· 8 月 14 日 第 3 趟</option><option value="b1">Kin（正脚）· 8 月 21 日 第 1 趟</option><option value="b2">Kin（正脚）· 8 月 21 日 第 2 趟</option><option value="b3">Kin（正脚）· 8 月 21 日 第 3 趟</option><option value="c1">李杨（反脚）· 6 月 30 日 第 1 趟</option><option value="c2">李杨（反脚）· 6 月 30 日 第 2 趟</option><option value="c3">李杨（反脚）· 6 月 30 日 第 3 趟</option><option value="d1">周占双（正脚）· 7 月 7 日 第 5 趟</option></select><div class="ctl"><span class="lb">速度</span><button data-rate="0.25">¼×</button><button data-rate="0.5">½×</button><button data-rate="1" class="on">1×</button></div>
@@ -822,10 +822,10 @@ const C={L:'#2a6fdb',R:'#e0303a',toe:'#e08a1e',heel:'#178f80',toeb:'#fdf1e2',hee
 const fmt=(v,n=0)=>v==null||!isFinite(v)?'—':(+v).toFixed(n);
 let RATE=1;
 function q(a,p){const v=a.filter(x=>x!=null).map(Math.abs).sort((x,y)=>x-y);return v.length?v[Math.floor((v.length-1)*p)]:1}
-function Run(sec,D){const n=D.sec.length;
+function Run(sec,D,M){const n=D.sec.length,FR=M.front;
  const inT=D.sec.map(s=>D.turns.some(t=>s>=t.t0-0.4&&s<=t.t1+0.4)),pk=k=>D[k+'L'].filter((_,i)=>inT[i]).concat(D[k+'R'].filter((_,i)=>inT[i]));
  const lim={yaw:Math.max(20,q(pk('yaw'),.99)*1.1),roll:Math.max(20,q(pk('roll'),.99)*1.1),rate:Math.max(40,q(pk('rate'),.99)*1.1)};
- const TT={track:'弯型（左右脚，起点对齐，上山下坡）',yaw:'Yaw 角（°，正 = 向左转）',roll:'Roll 立刃角（°，+ 后刃 / − 前刃）',rate:'旋转速率（°/s）'};
+ const TT={track:'弯型（雪板轨迹，上山下坡）',yaw:'Yaw 角（°，正 = 向左转）',roll:'Roll 立刃角（°，+ 后刃 / − 前刃）',rate:'旋转速率（°/s）'};
  function idx(s){let lo=0,hi=n-1;if(s<=D.sec[0])return 0;if(s>=D.sec[hi])return hi;while(hi-lo>1){const m=(lo+hi)>>1;if(D.sec[m]<s)lo=m;else hi=m}return lo}
  function Card(el,t){const v=el.querySelector('video'),cs=[...el.querySelectorAll('canvas')];
   const w0=t.c0!=null?t.c0:t.t0-0.4,w1=t.c0!=null?t.c1:t.t1+0.4,i0=idx(w0),i1=idx(w1),j0=idx(t.t0),j1=idx(t.t1);let hov=null;
@@ -849,13 +849,20 @@ function Run(sec,D){const n=D.sec.length;
    if(s!=null){const X=tx(s);g.strokeStyle='#e0303a';g.lineWidth=1.5;g.beginPath();g.moveTo(X,TP);g.lineTo(X,H-BM);g.stroke()}
    g.restore();g.strokeStyle=C.grid;g.strokeRect(LM+.5,TP+.5,W-LM-RM-1,H-TP-BM-1)}
   function tr(c,s){const P=prep(c);if(!P)return;const[g,W,H]=P;g.fillStyle=C.sub;g.font='12px -apple-system,PingFang SC,sans-serif';g.fillText(TT.track,6,14);
-   const F={};let a=1e9,b=-1e9,cc=1e9,d=-1e9;
-   for(const sd of['L','R']){const X=D['X'+sd],Y=D['Y'+sd],x0=X[j0],y0=Y[j0];F[sd]=i=>[Y[i]-y0,-(X[i]-x0)];for(let i=i0;i<=i1;i++){const[x,y]=F[sd](i);a=Math.min(a,x);b=Math.max(b,x);cc=Math.min(cc,y);d=Math.max(d,y)}}
-   const AW=W-16,AH=H-TP-10,sc=Math.min(AW/Math.max(b-a,1),AH/Math.max(d-cc,1),60),ox=8+AW/2-sc*(a+b)/2,oy=TP+AH/2+sc*(cc+d)/2,P2=([x,y])=>[ox+sc*x,oy-sc*y];
-   g.lineCap='round';
-   for(const sd of['L','R']){for(const[from,to,al,lw]of[[i0,j0,.25,2],[j1,i1,.25,2],[j0,j1,1,3]]){g.strokeStyle=C[sd];g.globalAlpha=al;g.lineWidth=lw;g.beginPath();for(let i=from;i<=to;i++){const[X,Y]=P2(F[sd](i));i===from?g.moveTo(X,Y):g.lineTo(X,Y)}g.stroke()}
-    g.globalAlpha=1;const[X0,Y0]=P2(F[sd](j0));g.fillStyle=C[sd];g.beginPath();g.arc(X0,Y0,3,0,7);g.fill();
-    const pt=s!=null?s:hov;if(pt!=null){const[X,Y]=P2(F[sd](idx(pt)));g.strokeStyle=C[sd];g.fillStyle='#fff';g.lineWidth=2;g.beginPath();g.arc(X,Y,5,0,7);g.fill();g.stroke()}}
+   // 主链路雪板轨迹，旋转 -90°：山顶在上、下坡朝下（不镜像）
+   const x0=D.X[j0],y0=D.Y[j0],F=i=>[D.Y[i]-y0,-(D.X[i]-x0)];let a=1e9,b=-1e9,cc=1e9,d=-1e9;
+   for(let i=i0;i<=i1;i++){const[x,y]=F(i);a=Math.min(a,x);b=Math.max(b,x);cc=Math.min(cc,y);d=Math.max(d,y)}
+   const AW=W-16,AH=H-TP-40,sc=Math.min(AW/Math.max(b-a,1),AH/Math.max(d-cc,1),60),ox=8+AW/2-sc*(a+b)/2,oy=TP+8+AH/2+sc*(cc+d)/2,P2=([x,y])=>[ox+sc*x,oy-sc*y];
+   g.lineCap='round';const ec=t.e==='前刃'?C.toe:C.heel;
+   for(const[from,to,col,lw]of[[i0,j0,'#c4cad6',3],[j1,i1,'#c4cad6',3],[j0,j1,ec,4]]){g.strokeStyle=col;g.lineWidth=lw;g.beginPath();for(let i=from;i<=to;i++){const[X,Y]=P2(F(i));i===from?g.moveTo(X,Y):g.lineTo(X,Y)}g.stroke()}
+   for(const k of[j0,j1]){const[X,Y]=P2(F(k));g.fillStyle='#1d2433';g.beginPath();g.arc(X,Y,3,0,7);g.fill()}
+   const pt=s!=null?s:hov,ib=pt!=null?idx(pt):j0,ia=Math.max(i0,ib-2),ic=Math.min(i1,ib+2),[Xa,Ya]=P2(F(ia)),[Xc,Yc]=P2(F(ic)),[Xb,Yb]=P2(F(ib)),an=Math.atan2(Yc-Ya,Xc-Xa);
+   const BL=Math.max(1.55*sc,34),BW=Math.max(8,0.28*sc),bk=FR==='L'?'R':'L';
+   g.save();g.translate(Xb,Yb);g.rotate(an);g.globalAlpha=pt!=null?1:0.45;g.fillStyle='#1d2433';g.beginPath();if(g.roundRect)g.roundRect(-BL/2,-BW/2,BL,BW,BW/2);else g.rect(-BL/2,-BW/2,BL,BW);g.fill();
+   for(const[sd,xx]of[[FR,BL*0.22],[bk,-BL*0.22]]){g.fillStyle=C[sd];g.strokeStyle='#fff';g.lineWidth=1.5;g.beginPath();g.arc(xx,0,Math.max(3.5,BW*0.42),0,7);g.fill();g.stroke()}
+   g.restore();g.globalAlpha=1;
+   g.font='11px sans-serif';g.fillStyle=C[FR];g.beginPath();g.arc(12,H-30,4,0,7);g.fill();g.fillStyle=C.sub;g.fillText('前脚（'+(FR==='L'?'左':'右')+'）',20,H-26);
+   g.fillStyle=C[bk];g.beginPath();g.arc(92,H-30,4,0,7);g.fill();g.fillStyle=C.sub;g.fillText('后脚（'+(bk==='L'?'左':'右')+'）',100,H-26);
    g.strokeStyle='#888';g.lineWidth=1;g.beginPath();g.moveTo(10,H-8);g.lineTo(10+sc*2,H-8);g.stroke();g.fillStyle='#888';g.font='10px sans-serif';g.fillText('2 米',12,H-11);
    g.textAlign='right';g.fillText('山顶',W-6,TP+12);g.fillText('↓ 下坡',W-6,H-6);g.textAlign='left'}
   function draw(){const s=now(),ss=s!=null&&!(v.paused&&v.currentTime===0)?s:null;cs.forEach(c=>c.dataset.p==='track'?tr(c,ss):ts(c,c.dataset.p,ss))}
@@ -871,7 +878,7 @@ function Run(sec,D){const n=D.sec.length;
  return{show(){cards.forEach(c=>c.draw())},cards}}
 const runs={};
 function show(k){document.querySelectorAll('section.run').forEach(s=>{const on=s.id==='s-'+k;s.hidden=!on;if(!on)s.querySelectorAll('video').forEach(v=>v.pause())});
- if(!runs[k])runs[k]=Run(document.getElementById('s-'+k),ALL[k]);runs[k].show();if(location.hash.slice(1).split('-')[0]!==k)history.replaceState(null,'','#'+k)}
+ if(!runs[k])runs[k]=Run(document.getElementById('s-'+k),ALL[k],META.find(m=>m.key===k));runs[k].show();if(location.hash.slice(1).split('-')[0]!==k)history.replaceState(null,'','#'+k)}
 const pick=document.getElementById('pick');pick.onchange=()=>{show(pick.value);scrollTo(0,0)};
 document.querySelectorAll('[data-rate]').forEach(b=>b.onclick=()=>{RATE=+b.dataset.rate;document.querySelectorAll('[data-rate]').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('video').forEach(v=>v.playbackRate=RATE)});
 addEventListener('resize',()=>Object.values(runs).forEach(r=>r.show()));
