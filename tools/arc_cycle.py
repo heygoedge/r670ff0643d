@@ -40,6 +40,9 @@ def cycles(D):
         nxt = turns[n + 1] if n + 1 < len(turns) else {}
         start, split, end = t.get('tflip'), t.get('tfl'), nxt.get('tflip')
         arc = dict(start=start, split=split, end=end, valid=False)
+        manual = t.get('tfl_source') == 'manual_video'
+        if manual:
+            arc.update(split_source='manual_video', video_time=t['tfl_video'])
         result.append(arc)
         if start is None:
             arc['reason'] = '缺少本次翻刃起点'
@@ -59,7 +62,7 @@ def cycles(D):
         # tfl falls back to the closest yaw sample when the board never crosses
         # the mean direction. That fallback cannot define two measured halves.
         old = relative[(sec >= t['t0']) & (sec <= t['t1'])]
-        if len(old) < 2 or not old.min() < 0 < old.max():
+        if not manual and (len(old) < 2 or not old.min() < 0 < old.max()):
             arc['reason'] = '本弯未越过滚落线参照，无法可靠切分上下半弧'
             continue
         direction = np.sign(np.interp(t['t1'], sec, yaw) - np.interp(t['t0'], sec, yaw)) or 1

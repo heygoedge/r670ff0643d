@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 
 from arc_cycle import cycles, integral
+from fallline_annotations import apply_turn, parse_timecode
 
 
 class ArcTests(unittest.TestCase):
@@ -53,12 +54,48 @@ class ArcTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             integral([0, 1, 2], [3, None, 3], 0, 2)
 
+    def test_video_timecodes_use_hundredths(self):
+        self.assertEqual(parse_timecode('12:10:50:92'), 43850.92)
+        with self.assertRaises(ValueError):
+            parse_timecode('12:60:50:92')
+
+    def test_manual_annotation_uses_watermark_offset_and_keeps_auto_value(self):
+        turn = dict(k=8, t0=43849, t1=43852, tfl=43850.462)
+        annotations = {'runs': {'d1': {'8': {'video_time': '12:10:50:92'}}}}
+        apply_turn('d1', turn, 0.12, annotations)
+        self.assertEqual(turn['tfl'], 43851.04)
+        apply_turn('d1', turn, 0.12, annotations)
+        self.assertEqual(turn['tfl_auto'], 43850.462)
+
+    def test_manual_fall_line_does_not_require_yaw_zero_crossing(self):
+        d = self.fixture()
+        d['turns'][0].update(t0=1.2, t1=2.8)
+        self.assertFalse(cycles(d)[0]['valid'])
+        d['turns'][0].update(tfl_source='manual_video', tfl_video='00:00:02:00')
+        self.assertTrue(cycles(d)[0]['valid'])
+
+    def test_manual_fall_line_still_requires_both_flip_boundaries(self):
+        d = self.fixture()
+        d['turns'][0].update(tfl_source='manual_video', tfl_video='00:00:02:00')
+        d['turns'][1]['tflip'] = 1.5
+        self.assertFalse(cycles(d)[0]['valid'])
+
 
 def audit():
     root = Path(__file__).resolve().parent.parent
     html = (root / 'index.html').read_text()
     start = re.search(r'\bALL\s*=', html).end()
     dataset = json.JSONDecoder().raw_decode(html[start:])[0]
+    meta_start = re.search(r'\bMETA\s*=', html).end()
+    meta = {m['key']: m for m in json.JSONDecoder().raw_decode(html[meta_start:])[0]}
+    annotations = json.loads((root / 'tools/fallline_annotations.json').read_text())
+    for key, points in annotations['runs'].items():
+        by_turn = {str(t['k']): t for t in dataset[key]['turns']}
+        for tid, point in points.items():
+            turn = by_turn[tid]
+            assert turn['tfl'] == round(parse_timecode(point['video_time']) + meta[key].get('wmd', 0), 3)
+            assert turn['tfl_source'] == 'manual_video'
+            assert turn['tfl_video'] == point['video_time']
     report = {}
     for k, d in dataset.items():
         c = json.loads((root / k / 'c4.json').read_text())
