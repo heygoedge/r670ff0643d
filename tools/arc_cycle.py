@@ -1,5 +1,6 @@
-"""Split one flip-to-flip cycle at the page's existing fall-line marker."""
+"""Split a turn between its signed Yaw extrema at the estimated fall line."""
 import numpy as np
+_trapezoid = getattr(np, 'trapezoid', None) or np.trapz
 
 
 def window(sec, values, start, end):
@@ -21,49 +22,48 @@ def window(sec, values, start, end):
 
 def integral(sec, values, start, end):
     x, y = window(sec, values, start, end)
-    return float(np.trapz(y, x))
+    return float(_trapezoid(y, x))
 
 
 def cycles(D):
-    """Return an auditable interval for every turn; never substitute a yaw cut."""
+    """Use the primary pipeline's Yaw-extremum cuts, with opposite signs."""
     raw_sec = np.asarray(D['sec'], float)
     keep = np.r_[np.diff(raw_sec) > 0, True]
     sec = raw_sec[keep]
     speed = np.asarray(D['spd'], float)[keep] / 3.6
-    yaw = np.degrees(np.asarray(D['yb'], float)[keep])
+    yaw = np.degrees(np.unwrap(np.asarray(D['yb'], float)[keep]))
     relative = yaw - np.polyval(np.polyfit(sec - sec[0], yaw, 1), sec - sec[0])
     rate = np.convolve(np.gradient(yaw, sec), np.ones(5) / 5, 'same')
     wp = np.abs(np.asarray(D['wp'], float)[keep])
     turns = D['turns']
     result = []
     for n, t in enumerate(turns):
-        nxt = turns[n + 1] if n + 1 < len(turns) else {}
-        start, split, end = t.get('tflip'), t.get('tfl'), nxt.get('tflip')
-        arc = dict(start=start, split=split, end=end, valid=False)
-        manual = t.get('tfl_source') == 'manual_video'
-        if manual:
-            arc.update(split_source='manual_video', video_time=t['tfl_video'])
+        start, split, end = t.get('t0'), t.get('tfl'), t.get('t1')
+        arc = dict(start=start, split=split, end=end, valid=False, basis='yaw_peak_pair')
         result.append(arc)
         if start is None:
-            arc['reason'] = '缺少本次翻刃起点'
+            arc['reason'] = '缺少起始 Yaw 峰值'
             continue
         if end is None:
-            arc['reason'] = '缺少下一次翻刃起点，无法确定完整半弧区间'
+            arc['reason'] = '缺少结束 Yaw 峰值，无法确定完整半弧区间'
             continue
         if not start < end:
-            arc['reason'] = '相邻翻刃起点时间不递增'
+            arc['reason'] = 'Yaw 峰值时间不递增'
             continue
         if start < sec[0] or end > sec[-1]:
-            arc['reason'] = '两个翻刃起点之间的传感器记录不完整'
+            arc['reason'] = '两个 Yaw 峰值之间的传感器记录不完整'
+            continue
+        a, b = np.interp([start, end], sec, relative)
+        arc.update(start_yaw=float(a), end_yaw=float(b),
+                   start_kind='正峰' if a > 0 else '负峰', end_kind='正峰' if b > 0 else '负峰')
+        if not t.get('tfl_valid', True):
+            arc['reason'] = t.get('tfl_reason') or '本弯没有可靠的滚落线估计'
+            continue
+        if a * b >= 0:
+            arc['reason'] = '起止 Yaw 未形成正、负峰值对'
             continue
         if split is None or not start < split < end:
-            arc['reason'] = '滚落线不在两个翻刃起点之间'
-            continue
-        # tfl falls back to the closest yaw sample when the board never crosses
-        # the mean direction. That fallback cannot define two measured halves.
-        old = relative[(sec >= t['t0']) & (sec <= t['t1'])]
-        if not manual and (len(old) < 2 or not old.min() < 0 < old.max()):
-            arc['reason'] = '本弯未越过滚落线参照，无法可靠切分上下半弧'
+            arc['reason'] = '滚落线不在两个 Yaw 峰值之间'
             continue
         direction = np.sign(np.interp(t['t1'], sec, yaw) - np.interp(t['t0'], sec, yaw)) or 1
         positive_rate = np.maximum(rate * direction, 0)
