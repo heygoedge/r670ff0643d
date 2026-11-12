@@ -1,0 +1,438 @@
+{
+  "runs": 18,
+  "counts": {
+    "turns": 587,
+    "unresolved": 48,
+    "yaw_route_fusion": 506,
+    "valid_arcs": 533,
+    "yaw_fallback": 33
+  },
+  "invalid_reasons": {
+    "本弯没有可靠的滚落线穿越，只显示最近参照点": 48,
+    "起止 Yaw 未形成正、负峰值对": 6
+  },
+  "classifier_replay_mismatches": 0,
+  "classification_changes": [
+    {
+      "key": "c3",
+      "turn": 8,
+      "before": "入弯甩板尾",
+      "after": "入弯甩板尾 + 射板"
+    },
+    {
+      "key": "e1",
+      "turn": 4,
+      "before": "射板",
+      "after": "无甩板尾"
+    },
+    {
+      "key": "e4",
+      "turn": 4,
+      "before": "无甩板尾",
+      "after": "射板"
+    },
+    {
+      "key": "e4",
+      "turn": 20,
+      "before": "无甩板尾",
+      "after": "射板"
+    },
+    {
+      "key": "e4",
+      "turn": 22,
+      "before": "无甩板尾",
+      "after": "射板"
+    },
+    {
+      "key": "e4",
+      "turn": 33,
+      "before": "射板",
+      "after": "入弯甩板尾（严重） + 射板"
+    },
+    {
+      "key": "e4",
+      "turn": 43,
+      "before": "无甩板尾",
+      "after": "射板"
+    },
+    {
+      "key": "e4",
+      "turn": 45,
+      "before": "射板",
+      "after": "无甩板尾"
+    },
+    {
+      "key": "e4",
+      "turn": 47,
+      "before": "无甩板尾",
+      "after": "射板"
+    },
+    {
+      "key": "g2",
+      "turn": 11,
+      "before": "无甩板尾",
+      "after": "射板"
+    }
+  ],
+  "known_tailwash_labels": [
+    {
+      "key": "d1",
+      "turn": 1,
+      "expected": "入弯甩板尾（严重）",
+      "before": "入弯甩板尾（严重）",
+      "after": "入弯甩板尾（严重）",
+      "baseline_passed": true,
+      "passed": true
+    },
+    {
+      "key": "d1",
+      "turn": 2,
+      "expected": "入弯甩板尾",
+      "before": "入弯甩板尾",
+      "after": "入弯甩板尾",
+      "baseline_passed": true,
+      "passed": true
+    },
+    {
+      "key": "d1",
+      "turn": 3,
+      "expected": "入弯甩板尾（严重）",
+      "before": "无甩板尾",
+      "after": "无甩板尾",
+      "baseline_passed": false,
+      "passed": false
+    },
+    {
+      "key": "d1",
+      "turn": 5,
+      "expected": "入弯甩板尾（严重）",
+      "before": "入弯甩板尾（严重）",
+      "after": "入弯甩板尾（严重）",
+      "baseline_passed": true,
+      "passed": true
+    },
+    {
+      "key": "d1",
+      "turn": 9,
+      "expected": "入弯甩板尾（严重）",
+      "before": "入弯甩板尾（严重）",
+      "after": "入弯甩板尾（严重）",
+      "baseline_passed": true,
+      "passed": true
+    },
+    {
+      "key": "d1",
+      "turn": 15,
+      "expected": "入弯甩板尾（严重）",
+      "before": "入弯甩板尾（严重）",
+      "after": "入弯甩板尾（严重）",
+      "baseline_passed": true,
+      "passed": true
+    },
+    {
+      "key": "e4",
+      "turn": 7,
+      "expected": "无甩板尾",
+      "before": "无甩板尾",
+      "after": "无甩板尾",
+      "baseline_passed": true,
+      "passed": true
+    },
+    {
+      "key": "e4",
+      "turn": 12,
+      "expected": "无甩板尾",
+      "before": "射板",
+      "after": "射板",
+      "baseline_passed": true,
+      "passed": true
+    },
+    {
+      "key": "e4",
+      "turn": 17,
+      "expected": "无甩板尾",
+      "before": "射板",
+      "after": "射板",
+      "baseline_passed": true,
+      "passed": true
+    },
+    {
+      "key": "e4",
+      "turn": 18,
+      "expected": "无甩板尾",
+      "before": "射板",
+      "after": "射板",
+      "baseline_passed": true,
+      "passed": true
+    },
+    {
+      "key": "e5",
+      "turn": 5,
+      "expected": "入弯甩板尾（严重）",
+      "before": "入弯甩板尾（严重）",
+      "after": "入弯甩板尾（严重）",
+      "baseline_passed": true,
+      "passed": true
+    },
+    {
+      "key": "e5",
+      "turn": 14,
+      "expected": "无甩板尾",
+      "before": "无甩板尾",
+      "after": "无甩板尾",
+      "baseline_passed": true,
+      "passed": true
+    }
+  ],
+  "known_tailwash_label_passes": 11,
+  "baseline_known_tailwash_label_passes": 11,
+  "run_details": {
+    "a1": {
+      "turns": 21,
+      "methods": {
+        "unresolved": 1,
+        "yaw_route_fusion": 20
+      },
+      "valid_arcs": 20,
+      "classifications": {
+        "无甩板尾": 21
+      }
+    },
+    "a2": {
+      "turns": 21,
+      "methods": {
+        "yaw_route_fusion": 21
+      },
+      "valid_arcs": 21,
+      "classifications": {
+        "无甩板尾": 19,
+        "射板": 2
+      }
+    },
+    "a3": {
+      "turns": 17,
+      "methods": {
+        "yaw_route_fusion": 16,
+        "yaw_fallback": 1
+      },
+      "valid_arcs": 17,
+      "classifications": {
+        "无甩板尾": 12,
+        "入弯甩板尾（严重）": 3,
+        "射板": 1,
+        "入弯甩板尾（严重） + 射板": 1
+      }
+    },
+    "b1": {
+      "turns": 34,
+      "methods": {
+        "yaw_route_fusion": 34
+      },
+      "valid_arcs": 33,
+      "classifications": {
+        "无甩板尾": 28,
+        "射板": 6
+      }
+    },
+    "b2": {
+      "turns": 21,
+      "methods": {
+        "unresolved": 11,
+        "yaw_route_fusion": 7,
+        "yaw_fallback": 3
+      },
+      "valid_arcs": 8,
+      "classifications": {
+        "无甩板尾": 14,
+        "入弯甩板尾（严重）": 6,
+        "入弯甩板尾（严重） + 射板": 1
+      }
+    },
+    "b3": {
+      "turns": 30,
+      "methods": {
+        "unresolved": 6,
+        "yaw_route_fusion": 24
+      },
+      "valid_arcs": 24,
+      "classifications": {
+        "无甩板尾": 24,
+        "射板": 5,
+        "入弯甩板尾（严重）": 1
+      }
+    },
+    "c1": {
+      "turns": 20,
+      "methods": {
+        "yaw_route_fusion": 19,
+        "unresolved": 1
+      },
+      "valid_arcs": 19,
+      "classifications": {
+        "无甩板尾": 15,
+        "射板": 4,
+        "入弯甩板尾（严重）": 1
+      }
+    },
+    "c2": {
+      "turns": 25,
+      "methods": {
+        "unresolved": 4,
+        "yaw_route_fusion": 20,
+        "yaw_fallback": 1
+      },
+      "valid_arcs": 20,
+      "classifications": {
+        "无甩板尾": 17,
+        "射板": 7,
+        "入弯甩板尾（严重）": 1
+      }
+    },
+    "c3": {
+      "turns": 27,
+      "methods": {
+        "unresolved": 9,
+        "yaw_route_fusion": 16,
+        "yaw_fallback": 2
+      },
+      "valid_arcs": 18,
+      "classifications": {
+        "入弯甩板尾（严重）": 5,
+        "无甩板尾": 17,
+        "入弯甩板尾 + 射板": 1,
+        "入弯甩板尾": 1,
+        "射板": 2,
+        "入弯甩板尾（严重） + 射板": 1
+      }
+    },
+    "d1": {
+      "turns": 36,
+      "methods": {
+        "yaw_route_fusion": 31,
+        "unresolved": 5
+      },
+      "valid_arcs": 31,
+      "classifications": {
+        "入弯甩板尾（严重）": 9,
+        "入弯甩板尾": 3,
+        "无甩板尾": 24
+      }
+    },
+    "e1": {
+      "turns": 37,
+      "methods": {
+        "yaw_route_fusion": 35,
+        "yaw_fallback": 2
+      },
+      "valid_arcs": 37,
+      "classifications": {
+        "无甩板尾": 25,
+        "射板": 12
+      }
+    },
+    "e2": {
+      "turns": 18,
+      "methods": {
+        "yaw_route_fusion": 16,
+        "unresolved": 2
+      },
+      "valid_arcs": 16,
+      "classifications": {
+        "入弯甩板尾（严重）": 13,
+        "入弯甩板尾（严重） + 射板": 2,
+        "无甩板尾": 3
+      }
+    },
+    "e3": {
+      "turns": 44,
+      "methods": {
+        "yaw_route_fusion": 33,
+        "yaw_fallback": 8,
+        "unresolved": 3
+      },
+      "valid_arcs": 40,
+      "classifications": {
+        "入弯甩板尾（严重）": 2,
+        "无甩板尾": 35,
+        "射板": 6,
+        "入弯甩板尾（严重） + 射板": 1
+      }
+    },
+    "e4": {
+      "turns": 74,
+      "methods": {
+        "unresolved": 1,
+        "yaw_fallback": 12,
+        "yaw_route_fusion": 61
+      },
+      "valid_arcs": 72,
+      "classifications": {
+        "无甩板尾": 21,
+        "射板": 45,
+        "入弯甩板尾（严重）": 1,
+        "入弯甩板尾（严重） + 射板": 7
+      }
+    },
+    "e6": {
+      "turns": 71,
+      "methods": {
+        "yaw_route_fusion": 67,
+        "yaw_fallback": 3,
+        "unresolved": 1
+      },
+      "valid_arcs": 70,
+      "classifications": {
+        "无甩板尾": 14,
+        "入弯甩板尾（严重）": 37,
+        "入弯甩板尾（严重） + 射板": 16,
+        "射板": 1,
+        "入弯甩板尾 + 射板": 2,
+        "入弯甩板尾": 1
+      }
+    },
+    "e5": {
+      "turns": 23,
+      "methods": {
+        "unresolved": 3,
+        "yaw_route_fusion": 20
+      },
+      "valid_arcs": 20,
+      "classifications": {
+        "无甩板尾": 19,
+        "入弯甩板尾（严重）": 4
+      }
+    },
+    "f3": {
+      "turns": 23,
+      "methods": {
+        "yaw_route_fusion": 22,
+        "unresolved": 1
+      },
+      "valid_arcs": 22,
+      "classifications": {
+        "无甩板尾": 15,
+        "射板": 8
+      }
+    },
+    "g2": {
+      "turns": 45,
+      "methods": {
+        "yaw_route_fusion": 44,
+        "yaw_fallback": 1
+      },
+      "valid_arcs": 45,
+      "classifications": {
+        "入弯甩板尾（严重）": 2,
+        "无甩板尾": 21,
+        "射板": 22
+      }
+    }
+  },
+  "conclusion_changed_rows": 601,
+  "conclusion_changed_slots": 5083,
+  "scope": "18 趟全部 587 弯的算法回放、输出一致性、半弧边界与积分检查；真实滚落线标注只有四个校准点。12 条历史标签仅核对甩板尾，不将独立的射板误算作甩板尾。",
+  "raw_sensor_sequence_changes": 0,
+  "turn_cut_changes": 0,
+  "unrelated_foot_metric_changes": 0,
+  "unit_tests_passed": 16
+}
